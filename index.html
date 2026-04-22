@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Box Model — CodeLearn Tutorial</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:        #0d0f1a;
+      --bg2:       #12152b;
+      --surface:   #181b2e;
+      --surface2:  #1e2240;
+      --border:    #252a4a;
+      --accent:    #818cf8;
+      --accent2:   #34d399;
+      --pink:      #f472b6;
+      --yellow:    #fbbf24;
+      --text:      #e2e8f0;
+      --muted:     #6b7280;
+      --editor-bg: #0c0e1e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent2); }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface2);
+      color: #a5b4fc;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+
+    /* ── AIM BANNER ── */
+    .aim-banner {
+      background: linear-gradient(90deg, #1e1b4b 0%, #1a1e3a 60%, #0d0f1a 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 12px 0;
+    }
+
+    .aim-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .aim-pill {
+      background: var(--accent);
+      color: #1e1b4b;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 13px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+      letter-spacing: 1.5px;
+    }
+
+    .aim-text {
+      font-size: 0.88rem;
+      color: #c7d2fe;
+      line-height: 1.6;
+    }
+
+    .aim-text strong { color: #fff; font-weight: 700; }
+
+    /* ── NAVBAR ── */
+    .site-nav {
+      background: rgba(13,15,26,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .site-nav .container {
+      display: flex;
+      align-items: center;
+      height: 58px;
+      gap: 24px;
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--accent) !important;
+      white-space: nowrap;
+    }
+
+    .nav-logo span { color: var(--accent2); }
+
+    .nav-links { display: flex; gap: 2px; list-style: none; }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.83rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .btn-nav {
+      margin-left: auto;
+      background: var(--accent);
+      color: #1e1b4b !important;
+      font-size: 0.78rem;
+      padding: 6px 16px;
+      border-radius: 7px;
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+
+    .btn-nav:hover { opacity: 0.85; }
+
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* ── HERO ── */
+    .hero {
+      background: radial-gradient(ellipse at 25% 40%, #1e1b4b 0%, #0d0f1a 65%);
+      border-bottom: 1px solid var(--border);
+      padding: 62px 0 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.22;
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    .breadcrumb-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 20px;
+    }
+
+    .breadcrumb-row .cur { color: var(--accent2); }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(129,140,248,0.1);
+      border: 1px solid rgba(129,140,248,0.28);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.71rem;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.7rem, 4vw, 2.55rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: #f1f5f9;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p.hero-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 520px;
+      margin-bottom: 26px;
+    }
+
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .chip { display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: var(--muted); }
+    .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .cd-indigo { background: var(--accent); }
+    .cd-green  { background: var(--accent2); }
+    .cd-pink   { background: var(--pink); }
+
+    /* ── PROGRESS STRIP ── */
+    .prog-strip {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 11px 0;
+    }
+
+    .prog-steps {
+      display: flex;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .pstep {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 13px;
+      border-radius: 6px;
+      color: var(--muted);
+    }
+
+    .pstep.done  { color: var(--accent2); }
+    .pstep.active {
+      background: rgba(129,140,248,0.1);
+      border: 1px solid rgba(129,140,248,0.22);
+      color: var(--accent);
+    }
+
+    .pstep-num {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700;
+    }
+
+    .pstep.done  .pstep-num { background: var(--accent2); color: #065f46; }
+    .pstep.active .pstep-num { background: var(--accent);  color: #1e1b4b; }
+    .pstep:not(.done):not(.active) .pstep-num { background: var(--surface2); color: var(--muted); }
+    .parrow { color: var(--border); padding: 0 3px; }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrap { display: grid; grid-template-columns: 210px 1fr; }
+
+    @media (max-width: 900px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .sidebar   { display: none; }
+    }
+
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 58px;
+      height: calc(100vh - 58px);
+      overflow-y: auto;
+    }
+
+    .sb-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 18px;
+      margin-bottom: 8px;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 14px;
+      margin: 0 6px;
+      border-radius: 7px;
+      font-size: 0.79rem;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+      text-decoration: none;
+    }
+
+    .sb-item:hover { background: var(--surface2); color: var(--text); }
+
+    .sb-item.active {
+      background: rgba(129,140,248,0.1);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .sb-divider { height: 1px; background: var(--border); margin: 10px 14px 16px; }
+
+    /* ── CONTENT ── */
+    .content { padding: 40px 50px 80px; max-width: 880px; }
+
+    @media (max-width: 768px) { .content { padding: 26px 18px 60px; } }
+
+    .sec-h { font-size: 1.22rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+    .sec-s { color: var(--muted); font-size: 0.83rem; margin-bottom: 22px; }
+
+    /* ── EXPLANATION CARD ── */
+    .explain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 26px 30px;
+      margin-bottom: 26px;
+    }
+
+    .explain-card > p { color: #94a3b8; margin-bottom: 16px; }
+    .explain-card ul  { list-style: none; padding: 0; }
+
+    .explain-card ul li {
+      display: flex;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      color: #94a3b8;
+      font-size: 0.88rem;
+    }
+
+    .explain-card ul li:last-child { border-bottom: none; }
+
+    .li-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .li-key {
+      font-family: 'JetBrains Mono', monospace;
+      color: #a5b4fc;
+      font-size: 0.81rem;
+      min-width: 86px;
+    }
+
+    .callout {
+      display: flex;
+      gap: 12px;
+      background: rgba(52,211,153,0.07);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-radius: 9px;
+      padding: 14px 18px;
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .callout strong { color: var(--accent2); }
+
+    /* ── LIVE EDITOR ── */
+    .live-editor-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 26px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .live-topbar {
+      background: #08091a;
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tlights { display: flex; gap: 6px; }
+    .tl { width: 12px; height: 12px; border-radius: 50%; }
+    .tl-r { background: #ff5f57; }
+    .tl-y { background: #febc2e; }
+    .tl-g { background: #28c840; }
+
+    .etabs { display: flex; margin-left: 8px; }
+
+    .etab {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.71rem;
+      padding: 0 16px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      color: var(--muted);
+      border-right: 1px solid var(--border);
+    }
+
+    .etab.on {
+      color: var(--text);
+      background: var(--editor-bg);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .run-btn {
+      margin-left: auto;
+      background: var(--accent2);
+      color: #064e3b;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.71rem;
+      font-weight: 700;
+      padding: 5px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+    }
+
+    .run-btn:hover { opacity: 0.85; }
+
+    .live-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 360px;
+    }
+
+    @media (max-width: 700px) { .live-body { grid-template-columns: 1fr; } }
+
+    /* Code side */
+    .code-pane {
+      display: flex;
+      border-right: 1px solid var(--border);
+      background: var(--editor-bg);
+    }
+
+    .lnums {
+      background: #060810;
+      padding: 18px 10px 18px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: #1e2240;
+      line-height: 1.86;
+      user-select: none;
+      text-align: right;
+      border-right: 1px solid #0f1220;
+      min-width: 36px;
+    }
+
+    .css-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 18px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      line-height: 1.86;
+      color: #e2e8f0;
+      caret-color: var(--accent2);
+      tab-size: 2;
+      width: 100%;
+    }
+
+    .css-textarea::selection { background: rgba(129,140,248,0.25); }
+
+    /* Output side */
+    .output-pane {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-bar {
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 7px 14px;
+      font-size: 0.71rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .out-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+
+    .out-frame { flex: 1; border: none; width: 100%; min-height: 320px; }
+
+    /* ── STATIC EDITOR (read-only) ── */
+    .editor {
+      background: var(--editor-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 26px;
+    }
+
+    .editor-bar {
+      background: #08091a;
+      border-bottom: 1px solid var(--border);
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 10px;
+    }
+
+    .editor-body { display: flex; }
+
+    .ccode {
+      padding: 18px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      line-height: 1.86;
+      color: var(--text);
+      overflow-x: auto;
+      white-space: pre;
+      flex: 1;
+    }
+
+    .cs  { color: #86efac; }
+    .cp  { color: #a5b4fc; }
+    .cv  { color: #fcd34d; }
+    .cc  { color: #2d3a52; font-style: italic; }
+    .ck  { color: #94a3b8; }
+
+    /* ── OUTPUT PREVIEW (static) ── */
+    .preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 26px;
+    }
+
+    .prev-bar {
+      background: #08091a;
+      border-bottom: 1px solid var(--border);
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+
+    .bdots { display: flex; gap: 6px; }
+    .bdots span { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+
+    .urlbar {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.69rem;
+      color: var(--muted);
+      padding: 3px 12px;
+      margin-left: 6px;
+      flex: 1;
+      max-width: 240px;
+    }
+
+    .prev-body { padding: 26px 30px; }
+
+    .demo-card {
+      background: #818cf8;
+      color: #fff;
+      padding: 20px 24px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      border: 2px solid #6366f1;
+      transition: background 0.25s, transform 0.2s;
+      cursor: default;
+    }
+
+    .demo-card:hover { background: #6366f1; transform: translateY(-2px); }
+    .demo-card p { font-size: 0.77rem; font-weight: 400; color: rgba(255,255,255,0.65); margin: 5px 0 0; }
+
+    .prev-note { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── TABLE ── */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-bottom: 26px;
+    }
+
+    .ref-table th {
+      background: var(--surface2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      padding: 11px 15px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .ref-table td { padding: 9px 15px; border: 1px solid var(--border); color: #94a3b8; vertical-align: top; }
+    .ref-table tbody tr { background: var(--surface); }
+    .ref-table tbody tr:nth-child(even) { background: var(--surface2); }
+    .ref-table tbody tr:hover { background: #1a1e3a; }
+
+    /* ── DIVIDER ── */
+    .div { height: 1px; background: var(--border); margin: 34px 0; }
+
+    /* ── PREV / NEXT ── */
+    .pnav { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 42px; }
+
+    @media (max-width: 520px) { .pnav { grid-template-columns: 1fr; } }
+
+    .pnav-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .pnav-card:hover { border-color: var(--accent); background: var(--surface2); }
+    .pnav-card .arr { font-size: 1.1rem; color: var(--accent); }
+    .pnav-card .nc-lbl { font-size: 0.66rem; color: var(--muted); margin-bottom: 3px; font-family: 'JetBrains Mono', monospace; }
+    .pnav-card .nc-ttl { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .pnav-card.nxt { flex-direction: row-reverse; text-align: right; }
+
+    /* ── PLAYGROUND ── */
+    .pg-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 26px;
+      display: flex;
+      flex-direction: column;
+      background: #0d0d0f;
+    }
+
+    .pg-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 18px;
+      background: #161618;
+      border-bottom: 1px solid #2a2a2e;
+      flex-shrink: 0;
+    }
+
+    .pg-logo {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #818cf8;
+      border: 1px solid #3b82f633;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .pg-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e8e8ed;
+      flex: 1;
+    }
+
+    .pg-run {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #22c55e;
+      color: #000;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .pg-run:hover { opacity: 0.85; transform: translateY(-1px); }
+    .pg-run:active { transform: translateY(0); }
+
+    .pg-editors {
+      display: flex;
+      height: 280px;
+      border-bottom: 3px solid #0d0d0f;
+      flex-shrink: 0;
+    }
+
+    .pg-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      border-right: 2px solid #0d0d0f;
+      background: #161618;
+    }
+
+    .pg-panel:last-child { border-right: none; }
+
+    .pg-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      background: #1e1e21;
+      border-bottom: 1px solid #2a2a2e;
+      flex-shrink: 0;
+    }
+
+    .pg-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pg-editor-wrap {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .pg-lnums {
+      padding: 10px 0;
+      min-width: 36px;
+      text-align: right;
+      padding-right: 10px;
+      background: #1e1e21;
+      border-right: 1px solid #2a2a2e;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #6e6e78;
+      overflow: hidden;
+      user-select: none;
+      flex-shrink: 0;
+      white-space: pre;
+    }
+
+    .pg-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #e8e8ed;
+      padding: 10px 12px;
+      overflow-y: auto;
+      overflow-x: auto;
+      white-space: pre;
+      caret-color: #22c55e;
+      tab-size: 2;
+    }
+
+    .pg-textarea::selection { background: #3b82f622; }
+    .pg-textarea::-webkit-scrollbar { width: 4px; height: 4px; }
+    .pg-textarea::-webkit-scrollbar-thumb { background: #2a2a2e; border-radius: 3px; }
+
+    .pg-output {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .pg-out-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 16px;
+      background: #1e1e21;
+      border-bottom: 1px solid #2a2a2e;
+      flex-shrink: 0;
+    }
+
+    .pg-out-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6e6e78;
+    }
+
+    .pg-out-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pg-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pgpulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pgpulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 42px 0 24px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 34px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    .f-brand { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--accent); margin-bottom: 10px; }
+    .f-brand span { color: var(--accent2); }
+    .f-desc { color: var(--muted); font-size: 0.78rem; line-height: 1.7; }
+    .f-heading { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .f-links { list-style: none; padding: 0; }
+    .f-links li { margin-bottom: 8px; }
+    .f-links a { color: #475569; font-size: 0.79rem; transition: color 0.15s; }
+    .f-links a:hover { color: var(--text); }
+
+    .f-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.73rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       AIM BANNER
+  ═══════════════════════════════════════ -->
+  <div class="aim-banner">
+    <div class="container">
+      <div class="aim-inner">
+        <span class="aim-pill">AIM</span>
+        <p class="aim-text">
+          <strong>Online Tutorial with Code Playground</strong> —
+          Design a tutorial page with an explanation section and a live code editor
+          that mimics a real development environment.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════ -->
+  <nav class="site-nav">
+    <div class="container">
+      <a class="nav-logo" href="#">&lt;CodeLearn<span>/&gt;</span></a>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#" class="active">CSS</a></li>
+        <li><a href="#">HTML</a></li>
+        <li><a href="#">Bootstrap</a></li>
+        <li><a href="#">Projects</a></li>
+      </ul>
+      <a href="https://github.com/samyakbcse25/Experiential-learning-mode-1code" class="btn-nav">GitHub Repo</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="breadcrumb-row">
+        <a href="#">Home</a> <span>›</span>
+        <a href="#">CSS Tutorials</a> <span>›</span>
+        <span class="cur">Box Model</span>
+      </div>
+      <div class="hero-badge">Level 2 &nbsp;·&nbsp; CSS &amp; Frameworks</div>
+      <h1>Understanding the<br /><em>CSS Box Model</em></h1>
+      <p class="hero-desc">
+        Every HTML element is a rectangular box. Learn how content, padding,
+        border, and margin work together — then try it live in the editor below.
+      </p>
+      <div class="hero-chips">
+        <div class="chip"><span class="chip-dot cd-indigo"></span> CSS3</div>
+        <div class="chip"><span class="chip-dot cd-green"></span> Bootstrap 5</div>
+        <div class="chip"><span class="chip-dot cd-pink"></span> Live Editor</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       PROGRESS STRIP
+  ═══════════════════════════════════════ -->
+  <div class="prog-strip">
+    <div class="container">
+      <div class="prog-steps">
+        <div class="pstep done"><span class="pstep-num">✓</span> HTML Structure</div>
+        <span class="parrow">›</span>
+        <div class="pstep active"><span class="pstep-num">2</span> CSS &amp; Frameworks</div>
+        <span class="parrow">›</span>
+        <div class="pstep"><span class="pstep-num">3</span> Advanced HTML</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PAGE LAYOUT
+  ═══════════════════════════════════════ -->
+  <div class="container p-0">
+    <div class="page-wrap">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sb-label">In This Module</div>
+        <a class="sb-item active" href="#explanation">◈ &nbsp;What is the Box Model?</a>
+        <a class="sb-item" href="#live-editor">◈ &nbsp;Live Code Editor</a>
+        <a class="sb-item" href="#reference">◈ &nbsp;Property Reference</a>
+
+        <div class="sb-divider"></div>
+        <div class="sb-label">Also in CSS</div>
+        <a class="sb-item" href="#">◇ &nbsp;Flexbox Layout</a>
+        <a class="sb-item" href="#">◇ &nbsp;Grid Layout</a>
+        <a class="sb-item" href="#">◇ &nbsp;Pseudo-classes</a>
+        <a class="sb-item" href="#">◇ &nbsp;CSS Variables</a>
+        <div class="sb-divider"></div>
+        <div class="sb-label">Bootstrap 5</div>
+        <a class="sb-item" href="#">◇ &nbsp;Grid System</a>
+        <a class="sb-item" href="#">◇ &nbsp;Navbar</a>
+        <a class="sb-item" href="#">◇ &nbsp;Cards &amp; Buttons</a>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="content">
+
+        <!-- ══ SECTION 1 — EXPLANATION ══ -->
+        <section id="explanation">
+          <div class="sec-h">What is the CSS Box Model?</div>
+          <div class="sec-s">How browsers calculate size and spacing for every HTML element.</div>
+
+          <div class="explain-card">
+            <p>
+              Every HTML element is treated as a rectangular
+              <strong style="color:#f1f5f9;">box</strong> by the browser.
+              The <strong style="color:#f1f5f9;">CSS Box Model</strong> describes
+              the four layers that make up that box, from the inside out:
+            </p>
+            <ul>
+              <li>
+                <span class="li-dot"></span>
+                <span class="li-key">content</span>
+                <span>The actual text or image — its size is set with <code>width</code> and <code>height</code>.</span>
+              </li>
+              <li>
+                <span class="li-dot"></span>
+                <span class="li-key">padding</span>
+                <span>Transparent space <em>inside</em> the border, between content and the edge.</span>
+              </li>
+              <li>
+                <span class="li-dot"></span>
+                <span class="li-key">border</span>
+                <span>A visible line drawn around the padding area.</span>
+              </li>
+              <li>
+                <span class="li-dot"></span>
+                <span class="li-key">margin</span>
+                <span>Transparent space <em>outside</em> the border — pushes other elements away.</span>
+              </li>
+            </ul>
+            <div class="callout">
+              <span style="flex-shrink:0;margin-top:2px;">💡</span>
+              <p>
+                <strong>Pro tip:</strong> Always add <code>box-sizing: border-box;</code> — this includes
+                padding and border <em>inside</em> the declared <code>width</code>, making layouts predictable.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ SECTION 2 — LIVE CODE EDITOR ══ -->
+        <section id="live-editor">
+          <div class="sec-h">Live Code Editor</div>
+          <div class="sec-s">Edit HTML, CSS and JS — click Run to see the output live. Press Tab to indent.</div>
+
+          <!-- ── Playground ── -->
+          <div class="pg-wrap">
+
+            <!-- Playground Header -->
+            <div class="pg-header">
+              <div class="pg-logo">AIM</div>
+              <span class="pg-title">Online Tutorial — Code Playground</span>
+              <button class="pg-run" onclick="pgRun()">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M8 5v14l11-7z"/></svg>
+                Run
+              </button>
+            </div>
+
+            <!-- Three editors side by side -->
+            <div class="pg-editors">
+
+              <div class="pg-panel">
+                <div class="pg-tab">
+                  <span class="pg-dot" style="background:#f97316;box-shadow:0 0 6px #f97316;"></span>
+                  <span style="color:#f97316;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;">index.html</span>
+                </div>
+                <div class="pg-editor-wrap">
+                  <div class="pg-lnums" id="pg-ln-html"></div>
+                  <textarea id="pg-ed-html" class="pg-textarea" spellcheck="false"
+                    oninput="pgSyncLines('html')" onscroll="pgSyncScroll('html')" onkeydown="pgTab(event)"></textarea>
+                </div>
+              </div>
+
+              <div class="pg-panel">
+                <div class="pg-tab">
+                  <span class="pg-dot" style="background:#3b82f6;box-shadow:0 0 6px #3b82f6;"></span>
+                  <span style="color:#3b82f6;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;">style.css</span>
+                </div>
+                <div class="pg-editor-wrap">
+                  <div class="pg-lnums" id="pg-ln-css"></div>
+                  <textarea id="pg-ed-css" class="pg-textarea" spellcheck="false"
+                    oninput="pgSyncLines('css')" onscroll="pgSyncScroll('css')" onkeydown="pgTab(event)"></textarea>
+                </div>
+              </div>
+
+              <div class="pg-panel">
+                <div class="pg-tab">
+                  <span class="pg-dot" style="background:#eab308;box-shadow:0 0 6px #eab308;"></span>
+                  <span style="color:#eab308;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;">script.js</span>
+                </div>
+                <div class="pg-editor-wrap">
+                  <div class="pg-lnums" id="pg-ln-js"></div>
+                  <textarea id="pg-ed-js" class="pg-textarea" spellcheck="false"
+                    oninput="pgSyncLines('js')" onscroll="pgSyncScroll('js')" onkeydown="pgTab(event)"></textarea>
+                </div>
+              </div>
+
+            </div><!-- /pg-editors -->
+
+            <!-- Output -->
+            <div class="pg-output">
+              <div class="pg-out-header">
+                <span class="pg-out-label">Output</span>
+                <span class="pg-out-status"><div class="pg-pulse"></div>Live Preview</span>
+              </div>
+              <iframe id="pg-frame" style="flex:1;border:none;background:#fff;width:100%;display:block;"></iframe>
+            </div>
+
+          </div><!-- /pg-wrap -->
+        </section>
+
+        <!-- ══ SECTION 4 — REFERENCE TABLE ══ -->
+        <section id="reference">
+          <div class="sec-h">Property Reference</div>
+          <div class="sec-s">Quick lookup for all Box Model CSS properties used above.</div>
+
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Example Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>background-color</code></td>
+                <td><code>#818cf8</code></td>
+                <td>Fill colour of the element's content + padding area.</td>
+              </tr>
+              <tr>
+                <td><code>padding</code></td>
+                <td><code>24px 32px</code></td>
+                <td>Inner spacing — top/bottom &amp; left/right.</td>
+              </tr>
+              <tr>
+                <td><code>margin</code></td>
+                <td><code>0 0 16px 0</code></td>
+                <td>Outer spacing — top · right · bottom · left.</td>
+              </tr>
+              <tr>
+                <td><code>border</code></td>
+                <td><code>2px solid #6366f1</code></td>
+                <td>Width, style, and colour of the border line.</td>
+              </tr>
+              <tr>
+                <td><code>border-radius</code></td>
+                <td><code>10px</code></td>
+                <td>Rounds each corner of the border box.</td>
+              </tr>
+              <tr>
+                <td><code>box-sizing</code></td>
+                <td><code>border-box</code></td>
+                <td>Includes padding &amp; border inside the declared width.</td>
+              </tr>
+              <tr>
+                <td><code>width</code></td>
+                <td><code>100%</code></td>
+                <td>Total width of the element (with border-box).</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- PREV / NEXT -->
+        <div class="pnav">
+          <a href="level1.html" class="pnav-card">
+            <span class="arr">←</span>
+            <div>
+              <div class="nc-lbl">Previous</div>
+              <div class="nc-ttl">HTML Structure &amp; Semantics</div>
+            </div>
+          </a>
+          <a href="level3.html" class="pnav-card nxt">
+            <span class="arr">→</span>
+            <div>
+              <div class="nc-lbl">Next</div>
+              <div class="nc-ttl">Advanced HTML Features</div>
+            </div>
+          </a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="f-brand">&lt;CodeLearn<span>/&gt;</span></div>
+          <p class="f-desc">
+            A Web Designing Lab Experiential Learning project for S. B. Jain
+            Institute of Technology, Nagpur. Built with HTML5, CSS3, and Bootstrap 5.
+          </p>
+        </div>
+        <div>
+          <div class="f-heading">Tutorials</div>
+          <ul class="f-links">
+            <li><a href="#">HTML Basics</a></li>
+            <li><a href="#">CSS Styling</a></li>
+            <li><a href="#">Bootstrap 5</a></li>
+            <li><a href="#">Flexbox</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="f-heading">Project</div>
+          <ul class="f-links">
+            <li><a href="level1.html">Level 1</a></li>
+            <li><a href="level2.html">Level 2</a></li>
+            <li><a href="level3.html">Level 3</a></li>
+            <li><a href="https://github.com/samyakbcse25/Experiential-learning-mode-1code">GitHub Repo</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="f-heading">Info</div>
+          <ul class="f-links">
+            <li><a href="#">About</a></li>
+            <li><a href="#">WD Lab</a></li>
+            <li><a href="#">SB Jain</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="f-bottom">
+        <span>&copy; 2026 CodeLearn &mdash; Web Designing Lab, S. B. Jain Institute of Technology, Nagpur</span>
+        <span>Session: 2025-26 (EVEN)</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* ── Live Editor ─────────────────────────── */
+
+    /* ── Playground default code ── */
+    const pgDefHTML = `<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>CSS Box Model</h1>
+  <p>Edit HTML, CSS and JS then click <strong>Run</strong>.</p>
+  <div class="box" id="myBox">Click me!</div>
+  <script src="script.js"><\/script>
+</body>
+</html>`;
+
+    const pgDefCSS = `body {
+  font-family: sans-serif;
+  padding: 24px;
+  background: #f1f5f9;
+}
+
+h1 { color: #3b82f6; margin-bottom: 8px; }
+
+p { color: #64748b; margin-bottom: 20px; font-size: 0.9rem; }
+
+.box {
+  width: 160px;
+  height: 160px;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s;
+  box-sizing: border-box;
+  border: 3px solid #2563eb;
+  padding: 16px;
+}
+
+.box:hover { transform: scale(1.05); }`;
+
+    const pgDefJS = `const box = document.getElementById('myBox');
+const colors = [
+  '#3b82f6','#f97316',
+  '#22c55e','#eab308',
+  '#8b5cf6','#ef4444'
+];
+let i = 0;
+
+box.addEventListener('click', function() {
+  i = (i + 1) % colors.length;
+  box.style.background = colors[i];
+});`;
+
+    document.getElementById('pg-ed-html').value = pgDefHTML;
+    document.getElementById('pg-ed-css').value  = pgDefCSS;
+    document.getElementById('pg-ed-js').value   = pgDefJS;
+    ['html','css','js'].forEach(id => pgSyncLines(id));
+
+    function pgRun() {
+      const html = document.getElementById('pg-ed-html').value;
+      const css  = document.getElementById('pg-ed-css').value;
+      const js   = document.getElementById('pg-ed-js').value;
+      const combined = html
+        .replace('href="style.css"', '')
+        .replace('src="script.js"', '')
+        .replace('</head>', '<style>' + css + '</style></head>')
+        .replace('</body>', '<script>' + js + '<\/script></body>');
+      const frame = document.getElementById('pg-frame');
+      frame.srcdoc = combined;
+    }
+
+    function pgSyncLines(id) {
+      const ta = document.getElementById('pg-ed-' + id);
+      const ln = document.getElementById('pg-ln-' + id);
+      const n  = ta.value.split('\n').length;
+      let out  = '';
+      for (let i = 1; i <= n; i++) out += i + '\n';
+      ln.textContent = out;
+    }
+
+    function pgSyncScroll(id) {
+      const ta = document.getElementById('pg-ed-' + id);
+      const ln = document.getElementById('pg-ln-' + id);
+      ln.scrollTop = ta.scrollTop;
+    }
+
+    function pgTab(e) {
+      if (e.key !== 'Tab') return;
+      e.preventDefault();
+      const ta  = e.target;
+      const s   = ta.selectionStart;
+      const end = ta.selectionEnd;
+      ta.value  = ta.value.substring(0, s) + '  ' + ta.value.substring(end);
+      ta.selectionStart = ta.selectionEnd = s + 2;
+      pgSyncLines(ta.id.replace('pg-ed-', ''));
+    }
+
+    window.addEventListener('load', () => {
+      pgRun();
+    });
+  </script>
+
+</body>
+</html>
